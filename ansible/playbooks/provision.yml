@@ -1,0 +1,10 @@
+---
+- name: Provision web servers
+  hosts: webservers
+  become: true
+
+  roles:
+    - role: common
+      tags: [common] # for lab06 added
+    - role: docker
+      tags: [docker] # for lab06 added
