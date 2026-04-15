@@ -1,0 +1,51 @@
+replicaCount: 5
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 5000
+  nodePort: 30081
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    memory: "128Mi"
+    cpu: "100m"
+
+env:
+  debug: "True"
+  releaseVersion: "dev-canary-v1"
+  appEnv: "dev"
+  logLevel: "DEBUG"
+
+configFile:
+  environment: "dev-bonus"
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 5000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /health
+    port: 5000
+  initialDelaySeconds: 3
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+persistence:
+  enabled: false
+
+rollout:
+  enabled: true
+  strategy: canary
